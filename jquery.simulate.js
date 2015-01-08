@@ -1,18 +1,18 @@
  /*!
- * jQuery Simulate v@VERSION - simulate browser mouse and keyboard events
+ * jQuery Simulate v1.0.0 - simulate browser mouse and keyboard events
  * https://github.com/jquery/jquery-simulate
  *
- * Copyright jQuery Foundation and other contributors
+ * Copyright 2012 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * Date: @DATE
+ * Date: 2014-08-22
  */
 
 ;(function( $, undefined ) {
 
 var rkeyEvent = /^key/,
-	rmouseEvent = /^(?:mouse|contextmenu)|click/;
+	rmouseEvent = /^(?:mouse|contextmenu|drag|drop|touch)|click/;
 
 $.fn.simulate = function( type, options ) {
 	return this.each(function() {
@@ -303,8 +303,11 @@ $.extend( $.simulate.prototype, {
 			dx = options.dx || ( options.x !== undefined ? options.x - x : 0 ),
 			dy = options.dy || ( options.y !== undefined ? options.y - y : 0 ),
 			moves = options.moves || 3;
+		center.x = x;
+		center.y = y;
 
 		this.simulateEvent( target, "mousedown", coord );
+		// this.simulateEvent( target, "dragstart", coord );
 
 		for ( ; i < moves ; i++ ) {
 			x += dx / moves;
@@ -315,7 +318,7 @@ $.extend( $.simulate.prototype, {
 				clientY: Math.round( y )
 			};
 
-			this.simulateEvent( target.ownerDocument, "mousemove", coord );
+			this.simulateEvent( target, "mousemove", coord );
 		}
 
 		if ( $.contains( document, target ) ) {
